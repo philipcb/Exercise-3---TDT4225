@@ -1,22 +1,18 @@
+import os
+
+from dotenv import load_dotenv
 from pymongo import MongoClient, version
+
+load_dotenv()
 
 
 class DbConnector:
-    """
-    Connects to the MongoDB server on the Ubuntu virtual machine.
-    Connector needs HOST, USER and PASSWORD to connect.
-
-    Example:
-    HOST = "tdt4225-00.idi.ntnu.no" // Your server IP address/domain name
-    USER = "testuser" // This is the user you created and added privileges for
-    PASSWORD = "test123" // The password you set for said user
-    """
 
     def __init__(self,
-                 DATABASE='DATABASE_NAME',
-                 HOST="tdt4225-xx.idi.ntnu.no",
-                 USER="TEST_USER",
-                 PASSWORD="test123"):
+                 DATABASE=os.environ.get("MONGO_DB", "movies"),
+                 HOST=os.environ.get("MONGO_HOST", "localhost:27017"),
+                 USER=os.environ.get("MONGO_USER", "movies_user"),
+                 PASSWORD=os.environ.get("MONGO_PASSWORD", "movies123")):
         uri = "mongodb://%s:%s@%s/%s" % (USER, PASSWORD, HOST, DATABASE)
         # Connect to the databases
         try:
