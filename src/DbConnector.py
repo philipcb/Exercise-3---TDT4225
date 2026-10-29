@@ -6,13 +6,21 @@ from pymongo import MongoClient, version
 load_dotenv()
 
 
+def read_env(name):
+    value = os.environ.get(name)
+    if not value:
+        raise RuntimeError("%s is missing. Copy .env.example to .env and fill in the values." % name)
+    return value
+
+
 class DbConnector:
 
-    def __init__(self,
-                 DATABASE=os.environ.get("MONGO_DB", "movies"),
-                 HOST=os.environ.get("MONGO_HOST", "localhost:27017"),
-                 USER=os.environ.get("MONGO_USER", "movies_user"),
-                 PASSWORD=os.environ.get("MONGO_PASSWORD", "movies123")):
+    def __init__(self, DATABASE=None, HOST=None, USER=None, PASSWORD=None):
+        # The connection settings are only read from .env, so no password is stored in the code
+        DATABASE = DATABASE or read_env("MONGO_DB")
+        HOST = HOST or read_env("MONGO_HOST")
+        USER = USER or read_env("MONGO_USER")
+        PASSWORD = PASSWORD or read_env("MONGO_PASSWORD")
         uri = "mongodb://%s:%s@%s/%s" % (USER, PASSWORD, HOST, DATABASE)
         # Connect to the databases
         try:
