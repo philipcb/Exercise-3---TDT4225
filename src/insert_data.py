@@ -56,7 +56,6 @@ def load_movies():
     movies.loc[no_votes, "vote_average"] = None
     summary.append(["vote_average: vote_count = 0 -> null", no_votes.sum()])
 
-
     movies["release_date"] = pd.to_datetime(
         movies["release_date"], format="%Y-%m-%d", errors="coerce"
     )
@@ -314,7 +313,7 @@ def insert_ratings(connection, movies):
                 "rating_variance": (count * user["sum_squares"] - user["sum"] ** 2)
                 / count**2,
                 "genres": sorted(user["genres"]),
-                "genre_count": len(user["genres"]), 
+                "genre_count": len(user["genres"]),
             }
         )
     connection.db["users"].insert_many(user_docs)
@@ -338,6 +337,9 @@ def main():
     db["movies"].create_index("cast.id")
     db["movies"].create_index("crew.id")
     db["movies"].create_index("release_year")
+    # Not used by the ten tasks, but they support looking up ratings per user and per movie
+    db["ratings"].create_index("user_id")
+    db["ratings"].create_index("movie_id")
     db["users"].create_index("ratings_count")
 
     print("\nCleaning summary")

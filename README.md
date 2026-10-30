@@ -36,5 +36,5 @@ query_results/           query results after running `python src/queries.py`
 The scripts can be run from any folder.
 
 1. `python src/eda/eda.py` - EDA of the raw CSV files
-2. `python src/insert_data.py` - drops the collections and inserts the cleaned data (takes about 5-6 minutes)
+2. `python src/insert_data.py` - drops the collections and inserts the cleaned data
 3. `python src/queries.py` - tasks 1-10
